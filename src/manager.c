@@ -503,7 +503,11 @@ add_server(struct manager_ctx *manager, struct server *server)
     cork_hash_table_put(server_table, (void *)server->port, (void *)server, &new, NULL, NULL);
 
     char *cmd = construct_command_line(manager, server);
-    if (system(cmd) == -1) {
+    int sys_ret = system(cmd);
+
+    LOGE("sys_ret: %d\n", sys_ret);
+
+    if (sys_ret != 0) {
         ERROR("add_server_system");
         return -1;
     }
@@ -607,6 +611,7 @@ manager_recv_cb(EV_P_ ev_io *w, int revents)
         LOGE("too large request: %d", (int)r);
         return;
     }
+    printf("buf: %s\n", buf);
 
     char *action = get_action(buf, r);
     if (action == NULL) {
