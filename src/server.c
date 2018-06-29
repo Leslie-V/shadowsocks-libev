@@ -1568,7 +1568,8 @@ accept_cb(EV_P_ ev_io *w, int revents)
             }
         }
         if (!in_white_list && plugin == NULL
-            && check_block_list(peer_name)) {
+            && 0) {
+            //&& check_block_list(peer_name)) {
             LOGE("block all requests from %s", peer_name);
 #ifdef __linux__
             set_linger(serverfd);
