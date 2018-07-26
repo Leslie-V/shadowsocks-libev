@@ -1,7 +1,7 @@
 if USE_SYSTEM_SHARED_LIB
 SUBDIRS = src
 else
-SUBDIRS = libcork libipset libbloom src
+SUBDIRS = libcork libipset libbloom libcares libsodium libev src
 endif
 
 if ENABLE_DOCUMENTATION

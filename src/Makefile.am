@@ -6,6 +6,11 @@ if !USE_SYSTEM_SHARED_LIB
 AM_CFLAGS += -I$(top_srcdir)/libbloom
 AM_CFLAGS += -I$(top_srcdir)/libipset/include
 AM_CFLAGS += -I$(top_srcdir)/libcork/include
+AM_CFLAGS += -I$(top_srcdir)/libsodium/src/libsodium/include
+AM_CFLAGS += -I$(top_srcdir)/libsodium/src/libsodium/include/sodium
+AM_CFLAGS += -I$(top_builddir)/libsodium/src/libsodium/include
+AM_CFLAGS += -I$(top_srcdir)/libcares
+AM_CFLAGS += -I$(top_srcdir)/libev
 endif
 AM_CFLAGS += $(LIBPCRE_CFLAGS)
 
@@ -13,11 +18,15 @@ SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
 if !USE_SYSTEM_SHARED_LIB
 SS_COMMON_LIBS += $(top_builddir)/libbloom/libbloom.la \
                   $(top_builddir)/libipset/libipset.la \
-                  $(top_builddir)/libcork/libcork.la
+                  $(top_builddir)/libcork/libcork.la \
+                  $(top_builddir)/libsodium/src/libsodium/libsodium.la \
+                  $(top_builddir)/libcares/libcares.la \
+                  $(top_builddir)/libev/libev.la
 else
 SS_COMMON_LIBS += -lbloom -lcork -lcorkipset
 endif
-SS_COMMON_LIBS += -lev -lsodium -lm
+#SS_COMMON_LIBS += -lev -lsodium -lm
+SS_COMMON_LIBS += -lm -lmbedtls -lmbedtls -lmbedcrypto
 
 bin_PROGRAMS = ss-local ss-tunnel ss-server
 if !BUILD_WINCOMPAT
@@ -79,10 +88,12 @@ ss_local_LDADD = $(SS_COMMON_LIBS)
 ss_tunnel_LDADD = $(SS_COMMON_LIBS)
 ss_server_LDADD = $(SS_COMMON_LIBS)
 ss_manager_LDADD = $(SS_COMMON_LIBS)
+if USE_SYSTEM_SHARED_LIB
 ss_local_LDADD += -lcares
 ss_tunnel_LDADD += -lcares
 ss_server_LDADD += -lcares
 ss_manager_LDADD += -lcares
+endif
 
 ss_local_CFLAGS = $(AM_CFLAGS) -DMODULE_LOCAL
 ss_tunnel_CFLAGS = $(AM_CFLAGS) -DMODULE_TUNNEL
@@ -104,7 +115,9 @@ ss_redir_SOURCES = utils.c \
 
 ss_redir_CFLAGS = $(AM_CFLAGS) -DMODULE_REDIR
 ss_redir_LDADD = $(SS_COMMON_LIBS)
+if !USE_SYSTEM_SHARED_LIB
 ss_redir_LDADD += -lcares
+endif
 endif
 
 lib_LTLIBRARIES = libshadowsocks-libev.la

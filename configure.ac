@@ -227,19 +227,26 @@ AC_CHECK_LIB(socket, connect)
 dnl Checks for library functions.
 AC_CHECK_FUNCS([malloc memset posix_memalign socket])
 
-AC_ARG_WITH(ev,
-  AS_HELP_STRING([--with-ev=DIR], [use a specific libev library]),
-  [CFLAGS="$CFLAGS -I$withval/include"
-   CPPFLAGS="$CPPFLAGS -I$withval/include"
-   LDFLAGS="$LDFLAGS -L$withval/lib"]
-)
-AC_CHECK_HEADERS([ev.h libev/ev.h], [], [])
-AC_CHECK_LIB([ev], [ev_loop_destroy], [LIBS="-lev $LIBS"], [AC_MSG_ERROR([Couldn't find libev. Try installing libev-dev@<:@el@:>@.])])
+#AC_ARG_WITH(ev,
+#  AS_HELP_STRING([--with-ev=DIR], [use a specific libev library]),
+#  [CFLAGS="$CFLAGS -I$withval/include"
+#   CPPFLAGS="$CPPFLAGS -I$withval/include"
+#   LDFLAGS="$LDFLAGS -L$withval/lib"]
+#)
+#AC_CHECK_HEADERS([ev.h libev/ev.h], [], [])
+#AC_CHECK_LIB([ev], [ev_loop_destroy], [LIBS="-lev $LIBS"], [AC_MSG_ERROR([Couldn't find libev. Try installing libev-dev@<:@el@:>@.])])
 
 AC_CONFIG_FILES([shadowsocks-libev.pc
                  Makefile
                  doc/Makefile
                  src/Makefile])
+
+AM_COND_IF([USE_SYSTEM_SHARED_LIB],
+  [],
+  [AC_CONFIG_SUBDIRS([libsodium
+                      libcares
+                      libev])])
+
 
 AM_COND_IF([USE_SYSTEM_SHARED_LIB],
 		   [AC_DEFINE([USE_SYSTEM_SHARED_LIB], [1], [Define if use system shared lib.])],
