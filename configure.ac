@@ -76,12 +76,12 @@ case $host in
 esac
 
 dnl Checks for TLS
-AX_TLS([:], [:])
+#AX_TLS([:], [:])
 
 dnl Checks for crypto libraries
-ss_MBEDTLS
-ss_SODIUM
-ss_CARES
+#ss_MBEDTLS
+#ss_SODIUM
+#ss_CARES
 
 dnl Checks for inet_ntop
 ss_FUNC_INET_NTOP
@@ -245,6 +245,7 @@ AM_COND_IF([USE_SYSTEM_SHARED_LIB],
   [],
   [AC_CONFIG_SUBDIRS([libsodium
                       libcares
+                      libmbedtls
                       libev])])
 
 

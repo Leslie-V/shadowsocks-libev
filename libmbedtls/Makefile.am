@@ -1,0 +1,3 @@
+SUBDIRS = library
+
+ACLOCAL_AMFLAGS = -I m4

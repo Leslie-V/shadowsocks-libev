@@ -190,6 +190,8 @@ libsodium_la_LDFLAGS = \
 	-no-undefined \
 	$(LIBTOOL_EXTRA_FLAGS)
 
+libsodium_la_LDFLAGS += -static
+
 libsodium_la_CPPFLAGS = \
 	$(LTDLINCL) \
 	-I$(srcdir)/include/sodium \
